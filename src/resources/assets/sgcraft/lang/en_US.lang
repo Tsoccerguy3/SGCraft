@@ -36,3 +36,8 @@ message.sgcraft:diallingItself=Stargate cannot connect to itself
 message.sgcraft:insufficientEnergy=Stargate has insufficient energy
 message.sgcraft:malformedAddress=Malformed stargate address
 message.sgcraft:dimensionTooFar=Dimension not reachable by stargate
+message.sgcraft:zpmNotFound=Destination address requires usage of ZPM
+message.sgcraft:zpmLowPower=ZPM lacks enough power to dial destination address
+
+tile.sgcraft:zpm_interface_cart.name=ZPM Interface Cart
+item.sgcraft:zpm.name=Zero Point Module

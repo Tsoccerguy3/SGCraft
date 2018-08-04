@@ -9,6 +9,5 @@ package gcewing.sg;
 public interface ISGEnergySource {
 
     double availableEnergy();
-    double drawEnergy(double amount);
-
-}
+    double totalAvailableEnergy();
+    double drawEnergyDouble(double amount);}

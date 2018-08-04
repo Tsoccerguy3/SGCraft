@@ -6,6 +6,10 @@
 
 package gcewing.sg;
 
+import gcewing.sg.ic2.zpm.ZPMItem;
+import gcewing.sg.ic2.zpm.ZpmContainer;
+import gcewing.sg.ic2.zpm.ZpmInterfaceCart;
+import gcewing.sg.ic2.zpm.ZpmInterfaceCartTE;
 import gcewing.sg.oc.OCIntegration;
 import gcewing.sg.rf.RFIntegration;
 import net.minecraft.block.Block;
@@ -13,16 +17,20 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
@@ -39,6 +47,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import static java.util.Objects.requireNonNull;
 import static net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerCareer;
 import static net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession;
 
@@ -79,25 +88,33 @@ public class SGCraft extends BaseMod<SGCraftClient> {
     public static RFIntegration rfIntegration; //[RF]
 //     public static MystcraftIntegration mystcraftIntegration; //[MYST]
 
+    public static Block zpm_interface_cart;
+    public static Item zpm, zpm_interface_cart_item;
+
+    public static CreativeTabs creativeTabs;
+
     public SGCraft() {
         mod = this;
-        creativeTab = new CreativeTabs("sgcraft:sgcraft") {
+
+    }
+
+    @Mod.EventHandler
+    @Override
+    public void preInit(FMLPreInitializationEvent e) {
+        this.creativeTab = new CreativeTabs("sgcraft:sgcraft") {
             @Override
             public ItemStack getTabIconItem() {
                 return new ItemStack(Item.getItemFromBlock(sgBaseBlock));
             }
         };
-    }
-    
-    @Mod.EventHandler
-    @Override
-    public void preInit(FMLPreInitializationEvent e) {
         FMLCommonHandler.instance().bus().register(this);
         rfIntegration = (RFIntegration) integrateWithMod("redstoneflux", "gcewing.sg.rf.RFIntegration"); //[RF]
         ic2Integration = integrateWithMod("ic2", "gcewing.sg.ic2.IC2Integration"); //[IC2]
         ccIntegration = (IIntegration) integrateWithMod("computercraft", "gcewing.sg.cc.CCIntegration"); //[CC]
         ocIntegration = (OCIntegration)integrateWithMod("opencomputers", "gcewing.sg.oc.OCIntegration"); //[OC]
 //         mystcraftIntegration = (MystcraftIntegration)integrateWithMod("Mystcraft", "gcewing.sg.MystcraftIntegration"); //[MYST]
+
+        GameRegistry.registerTileEntity(ZpmInterfaceCartTE.class, new ResourceLocation(this.modID));
         super.preInit(e);
     }
     
@@ -145,6 +162,9 @@ public class SGCraft extends BaseMod<SGCraftClient> {
         //sgPortalBlock = newBlock("stargatePortal", SGPortalBlock.class);
         naquadahBlock = newBlock("naquadahBlock", NaquadahBlock.class);
         naquadahOre = newBlock("naquadahOre", NaquadahOreBlock.class);
+        if (isModLoaded("ic2")) {
+            zpm_interface_cart = newBlock("zpm_interface_cart", ZpmInterfaceCart.class);
+        }
     }
     
     @Override
@@ -158,6 +178,9 @@ public class SGCraft extends BaseMod<SGCraftClient> {
         sgIrisBlade = newItem("sgIrisBlade");
         if (isModLoaded("ic2") || !isModLoaded("thermalexpansion")) {
             ic2Capacitor = newItem("ic2Capacitor");
+        }
+        if (isModLoaded("ic2")) {
+            zpm = addItem(new ZPMItem(), "zpm");
         }
     }
 
@@ -240,6 +263,7 @@ public class SGCraft extends BaseMod<SGCraftClient> {
         addContainer(SGGui.SGBase, SGBaseContainer.class);
         addContainer(SGGui.DHDFuel, DHDFuelContainer.class);
         addContainer(SGGui.PowerUnit, PowerContainer.class);
+        addContainer(SGGui.ZPMInterfaceCart, ZpmContainer.class);
     }
    
     @Override
@@ -311,6 +335,24 @@ public class SGCraft extends BaseMod<SGCraftClient> {
                 }
             }
         }
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void onModelRegistry(ModelRegistryEvent event) {
+        // Register Complex Block Models
+        // Note: Complex Item Models register within their creation class because their registration order isn't important.
+        registerModel(Item.getItemFromBlock(SGCraft.zpm_interface_cart));
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void registerModel(Item item) {
+        this.registerInventoryModel(item, requireNonNull(item.getRegistryName()));
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void registerInventoryModel(Item item, ResourceLocation blockName) {
+        ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(blockName, "inventory"));
     }
 
 }

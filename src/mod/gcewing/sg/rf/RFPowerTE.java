@@ -103,4 +103,8 @@ public class RFPowerTE extends PowerTE implements IEnergyStorage {
     public boolean canReceive() {
         return storage.canReceive();
     }
+
+    @Override public double totalAvailableEnergy() {
+        return energyBuffer;
+    }
 }

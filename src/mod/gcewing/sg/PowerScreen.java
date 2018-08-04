@@ -44,9 +44,9 @@ public class PowerScreen extends BaseGui.Screen {
         int cx = xSize / 2;
         drawCenteredString(te.getScreenTitle(), cx, 8);
         drawRightAlignedString(te.getUnitName(), 72, 28);
-        drawRightAlignedString(String.format("%F", te.energyBuffer), 121, 28);
+        drawRightAlignedString(String.format("%s", te.energyBuffer), 121, 28);
         drawRightAlignedString("Max", 72, 42);
-        drawRightAlignedString(String.format("%F", te.energyMax), 121, 42);
+        drawRightAlignedString(String.format("%s", te.energyMax), 121, 42);
          drawPowerGauge();
     }
     

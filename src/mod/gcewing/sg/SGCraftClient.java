@@ -8,6 +8,8 @@ package gcewing.sg;
 
 // import gcewing.sg.ic2.*; //[IC2]
 
+import gcewing.sg.ic2.zpm.ZPMInterfaceCartScreen;
+
 public class SGCraftClient extends BaseModClient<SGCraft> {
 
     public SGCraftClient(SGCraft mod) {
@@ -23,6 +25,7 @@ public class SGCraftClient extends BaseModClient<SGCraft> {
         addScreen(SGGui.SGController, DHDScreen.class);
         addScreen(SGGui.DHDFuel, DHDFuelScreen.class);
         addScreen(SGGui.PowerUnit, PowerScreen.class);
+        addScreen(SGGui.ZPMInterfaceCart, ZPMInterfaceCartScreen.class);
     }
 
     @Override

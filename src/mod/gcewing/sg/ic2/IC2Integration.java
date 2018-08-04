@@ -6,10 +6,16 @@
 
 package gcewing.sg.ic2;
 
+import gcewing.sg.ic2.zpm.ZPMItem;
+import gcewing.sg.ic2.zpm.ZpmInterfaceCart;
+import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.*;
 import gcewing.sg.*;
 
 import ic2.api.item.*; //[IC2]
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class IC2Integration extends BaseSubsystem<SGCraft, SGCraftClient> {
 
@@ -27,8 +33,10 @@ public class IC2Integration extends BaseSubsystem<SGCraft, SGCraftClient> {
     @Override
     public void registerBlocks() {
         mod.ic2PowerUnit = mod.newBlock("ic2PowerUnit", IC2PowerBlock.class, IC2PowerItem.class);
+
+
     }
-    
+
     @Override
     public void registerRecipes() {
         ItemStack rubber = getIC2Item("crafting", "rubber");

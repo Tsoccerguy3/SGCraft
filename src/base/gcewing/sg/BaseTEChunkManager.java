@@ -64,6 +64,7 @@ public class BaseTEChunkManager implements ForgeChunkManager.LoadingCallback {
         te.releaseChunkTicket();
         Ticket ticket = getChunkTicket(te);
         if (ticket != null) {
+            System.out.println("Set Chunk Load ticket");
             BlockPos pos = te.getPos();
             NBTTagCompound nbt = ticket.getModData();
             nbt.setString("type", "TileEntity");

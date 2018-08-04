@@ -24,7 +24,7 @@ public class IC2PowerTE extends PowerTE implements IEnergySink, ITickable {
 
     final static int maxSafeInput = 2048;
     final static int maxEnergyBuffer = 1000000;
-    final static double euPerSGEnergyUnit = 20.0;
+    final static double euPerSGEnergyUnit = 200.0;
 
     boolean loaded = false;
     
@@ -101,7 +101,10 @@ public class IC2PowerTE extends PowerTE implements IEnergySink, ITickable {
     
     @Override
     public int getSinkTier() {
-        return 3;
+        return 3;  //HV
     }
-    
+
+    @Override public double totalAvailableEnergy() {
+        return energyBuffer;
+    }
 }
